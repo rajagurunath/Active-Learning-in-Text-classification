@@ -18,7 +18,7 @@ To make the classifiers learn actively we need to introduce active learning in a
 ## Active learning in this Repository -Implementation details:
 - ### Similarity method
 - ### Custom classifier (which supports adding Extra class on the fly)
-
+- ### Explanation for the classification results using **LIME*
 This Repository consists of Dashboard made up of Dash & plotly for user Annotation, which is used to train the learning 
 algorithm actively.
 
@@ -37,6 +37,7 @@ Steps taken to convert Unlabeled text data to labeled data in this demo are :
 ### RoadMap:
 - Try Different state of Art transformers such as *ULMFIT* (which is trained on entire Wikipedia ),*ELMO* ,*BERT*.
 - Try *Neural Network* based Approach to add New Class to the already trained model .
+- Integerate with **Shap** Interpretation as well to explain the Predictions to the User.
   
   
   
