@@ -34,7 +34,20 @@ Steps taken to convert Unlabeled text data to labeled data in this demo are :
   model from scratch, just add the class to the lookup table in KNN classifier,Since KNN is distance or similarity based approach it 
   chooses the relevant class based on the nearest neigbhours .
  ## Dashboard Interfaces:
+ ### Loading the Dataset (Twitter tweets)
 ![Dataset loading interface](IMG/dataset_loaded.JPG)
+### Similarity Methods to get relevant Tweets in the dataset
+![similar tweets](IMG/similarity_output.JPG)
+### Prepare Training dataset
+![prepare training data](IMG/after_human_annotation.JPG)
+### Training Data Overview
+![view the training data](IMG/prepared_training_dataset.JPG)
+### Training Interface
+![train](IMG/training_interface.JPG)
+
+
+
+
 ### RoadMap:
 - Try Different state of Art transformers such as *ULMFIT* (which is trained on entire Wikipedia ),*ELMO* ,*BERT*.
 - Try *Neural Network* based Approach to add New Class to the already trained model .
