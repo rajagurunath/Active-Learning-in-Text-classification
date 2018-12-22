@@ -33,7 +33,8 @@ Steps taken to convert Unlabeled text data to labeled data in this demo are :
   For example : if you train a classifier with two class,then if you have a new data for Third class, no need to train the 
   model from scratch, just add the class to the lookup table in KNN classifier,Since KNN is distance or similarity based approach it 
   chooses the relevant class based on the nearest neigbhours .
-  
+ ## Dashboard Interfaces:
+![Dataset loading interface](IMG/dataset_loaded.JPG)
 ### RoadMap:
 - Try Different state of Art transformers such as *ULMFIT* (which is trained on entire Wikipedia ),*ELMO* ,*BERT*.
 - Try *Neural Network* based Approach to add New Class to the already trained model .
