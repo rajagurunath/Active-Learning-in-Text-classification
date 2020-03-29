@@ -13,7 +13,8 @@ import dash
 from dash.dependencies import Input, Output
 import dash_core_components as dcc
 import dash_html_components as html
-import dash_table_experiments as dt
+# import dash_table_experiments as dt
+import dash_table as dt
 import  plotly.graph_objs as go
 
 import numpy as np
@@ -47,7 +48,7 @@ DIRECTORY_PATH=r'tmp\\'
 
 #app = dash.Dash()
 
-app.scripts.config.serve_locally = True
+app.scripts.config.serve_locally = False
 
 app.config['suppress_callback_exceptions']=True
 
@@ -82,7 +83,7 @@ app.layout = html.Div([
         multiple=True
     ),
     html.Div(id='output-data-upload'),
-    html.Div(dt.DataTable(rows=[{}]), style={'display': 'none'}),
+    # html.Div(dt.DataTable(rows=[{}]), style={'display': 'none'}),
     dcc.Input(id='user-input-for-similarity', 
                                        value='Enter the sentence', type='text',
                                        style={'width': '49%','align':'center'}),
@@ -136,6 +137,7 @@ def parse_contents(contents, file_name, date):
         elif 'xls' in file_name:
             # Assume that the user uploaded an excel file
             df = pd.read_excel(io.BytesIO(decoded))
+        print(df.head(10))
     except Exception as e:
         print(e)
         return html.Div([
@@ -154,8 +156,9 @@ def parse_contents(contents, file_name, date):
 
         # Use the DataTable prototype component:
         # github.com/plotly/dash-table-experiments
-        dt.DataTable(rows=df.to_dict('records'),id='edit-table'),
-
+        # dt.DataTable(rows=df.to_dict('records'),id='edit-table'),
+        dt.DataTable(columns=[{"name": i, "id": i} for i in df.columns],
+            data=df.to_dict('records'),id='edit-table'),
         html.Hr(),  # horizontal line
 
         # For debugging, display the raw contents provided by the web browser
@@ -181,7 +184,8 @@ def get_similar_docs(sent):
     
     print('check',similar_df.head())
 #    similar_df.to_csv
-    return html.Div(dt.DataTable(rows=similar_df.to_dict('records'),id='edit-table-similar'),)
+    return html.Div(dt.DataTable(columns=[{"name": i, "id": i} for i in df.columns],
+    data=similar_df.to_dict('records'),id='edit-table-similar'),)
     
 
 

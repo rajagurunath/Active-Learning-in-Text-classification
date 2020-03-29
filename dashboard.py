@@ -16,7 +16,7 @@ import pandas as pd
 from datetime import datetime as dt
 import plotly.graph_objs as go
 import dash_auth
-import plotly.dashboard_objs as dashboard
+# import plotly.dashboard_objs as dashboard
 
 class Dashboard():
     """
