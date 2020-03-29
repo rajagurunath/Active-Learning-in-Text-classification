@@ -51,7 +51,7 @@ external_scripts = [
 # external CSS stylesheets
 external_stylesheets = [
     'https://codepen.io/chriddyp/pen/bWLwgP.css',
-    "https://codepen.io/chriddyp/pen/brPBPO.css",
+    # "https://codepen.io/chriddyp/pen/brPBPO.css",
     {
         'href': 'https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css',
         'rel': 'stylesheet',
@@ -70,7 +70,7 @@ app = dash.Dash(__name__,
 # app=dash.Dash(name = __name__, server = server)
 if not os.path.exists('tmp'):
     os.mkdir('tmp')
-DIRECTORY_PATH=r'tmp\\'
+DIRECTORY_PATH=r'tmp//'
 
 
 #app = dash.Dash()
@@ -165,6 +165,7 @@ def parse_contents(contents, file_name, date):
             # Assume that the user uploaded an excel file
             df = pd.read_excel(io.BytesIO(decoded))
         print(df.head(10))
+        df=df.iloc[:15,:]
     except Exception as e:
         print(e)
         return html.Div([
@@ -186,6 +187,11 @@ def parse_contents(contents, file_name, date):
         # dt.DataTable(rows=df.to_dict('records'),id='edit-table'),
         dt.DataTable(columns=[{"name": i, "id": i} for i in df.columns],
             data=df.to_dict('records'),id='edit-table',
+            style_cell = {
+                'font_family': 'Times',
+                'font_size': '26px',
+                'text_align': 'left'
+            },
             style_table={
                 'maxHeight': '300px',
                 'overflowY': 'scroll'
@@ -214,18 +220,28 @@ def get_similar_docs(sent):
     similar_series=get_similar_records(sent,df[df.columns[0]])
     similar_df=pd.DataFrame(columns=['Similar_sentences','labels'])
     similar_df['Similar_sentences']=similar_series
-    
+    similar_df['labels']=1
     
     print('check',similar_df.head())
 #    similar_df.to_csv
     table=html.Div(dt.DataTable(columns=[{"name": i, "id": i} for i in similar_df.columns],
-    data=similar_df.to_dict('records'),id='edit-table-similar'),
+    data=similar_df.to_dict('records'),id='edit-table-similar',
+    editable=True,
+    style_data={
+        'whiteSpace': 'normal',
+        'height': 'auto'
+    },
+    style_cell = {
+                'font_family': 'Times',
+                'font_size': '20px',
+                'text_align': 'left'
+            },
     style_table={
         'maxHeight': '300px',
         'overflowY': 'scroll'
     },
     fixed_rows={ 'headers': True, 'data': 0 },
-
+    )
     )
     print(table)
     return table
@@ -383,11 +399,12 @@ def generate_table(dataframe, max_rows=10):
 
 @app.callback(
     Output('output', 'children'),
-    [Input('edit-table-similar', 'rows')])
+    [Input('edit-table-similar', 'data')])
 def update_selected_row_indices(rows):
 #    path=glob.glob(r'D:\Testing_frameworks\Testcase-Vmops\Insight\src\features\tmp\*.csv')
 #    filename=path[0].split('\\')[-1].split('.')[0]
     df=pd.DataFrame(rows)
+    print("training data",df)
 #    print(df)
     global similar_df
     similar_df=df
