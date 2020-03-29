@@ -38,9 +38,36 @@ from lime.lime_text import LimeTextExplainer
 
 
 server = Flask(__name__)
+external_scripts = [
+    'https://www.google-analytics.com/analytics.js',
+    {'src': 'https://cdn.polyfill.io/v2/polyfill.min.js'},
+    {
+        'src': 'https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.10/lodash.core.js',
+        'integrity': 'sha256-Qqd/EfdABZUcAxjOkMi8eGEivtdTkh3b65xCZL4qAQA=',
+        'crossorigin': 'anonymous'
+    }
+]
+
+# external CSS stylesheets
+external_stylesheets = [
+    'https://codepen.io/chriddyp/pen/bWLwgP.css',
+    "https://codepen.io/chriddyp/pen/brPBPO.css",
+    {
+        'href': 'https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css',
+        'rel': 'stylesheet',
+        'integrity': 'sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO',
+        'crossorigin': 'anonymous'
+    }
+]
 
 
-app=dash.Dash(name = __name__, server = server)
+app = dash.Dash(__name__,
+                external_scripts=external_scripts,
+                external_stylesheets=external_stylesheets,
+                server = server)
+
+
+# app=dash.Dash(name = __name__, server = server)
 if not os.path.exists('tmp'):
     os.mkdir('tmp')
 DIRECTORY_PATH=r'tmp\\'
@@ -158,7 +185,14 @@ def parse_contents(contents, file_name, date):
         # github.com/plotly/dash-table-experiments
         # dt.DataTable(rows=df.to_dict('records'),id='edit-table'),
         dt.DataTable(columns=[{"name": i, "id": i} for i in df.columns],
-            data=df.to_dict('records'),id='edit-table'),
+            data=df.to_dict('records'),id='edit-table',
+            style_table={
+                'maxHeight': '300px',
+                'overflowY': 'scroll'
+            },
+            fixed_rows={ 'headers': True, 'data': 0 },
+
+        ),
         html.Hr(),  # horizontal line
 
         # For debugging, display the raw contents provided by the web browser
@@ -184,9 +218,17 @@ def get_similar_docs(sent):
     
     print('check',similar_df.head())
 #    similar_df.to_csv
-    return html.Div(dt.DataTable(columns=[{"name": i, "id": i} for i in df.columns],
-    data=similar_df.to_dict('records'),id='edit-table-similar'),)
-    
+    table=html.Div(dt.DataTable(columns=[{"name": i, "id": i} for i in similar_df.columns],
+    data=similar_df.to_dict('records'),id='edit-table-similar'),
+    style_table={
+        'maxHeight': '300px',
+        'overflowY': 'scroll'
+    },
+    fixed_rows={ 'headers': True, 'data': 0 },
+
+    )
+    print(table)
+    return table
 
 
 def train_custom_classifier(similar_df,filename):
@@ -353,10 +395,10 @@ def update_selected_row_indices(rows):
     return generate_table(df)
 
 
-app.css.append_css({
-    'external_url': 'https://codepen.io/chriddyp/pen/bWLwgP.css'
-})
-app.css.append_css({"external_url": "https://codepen.io/chriddyp/pen/brPBPO.css"})
+# app.css.append_css({
+#     'external_url': 'https://codepen.io/chriddyp/pen/bWLwgP.css'
+# })
+# app.css.append_css({"external_url": "https://codepen.io/chriddyp/pen/brPBPO.css"})
 
 
 if __name__ == '__main__':
